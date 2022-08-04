@@ -1,5 +1,5 @@
 # Final Project (Change Name Once We Settle On One...)
-placeholder description. (change once we figure out project and )
+placeholder description. (change once we figure out project and features of it)
 
 ## Purpose
 ---
