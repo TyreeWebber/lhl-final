@@ -1,0 +1,11 @@
+User Stories
+  - Users can name themselves before joining a game
+  - Users can join a game session
+  - User can create a game session
+  - User can control a character
+  - User can score points by eating resources
+  - User can power up by eating a power up
+  - User can eat non-powered users while in a powered state
+  - User cannot eat other powered users
+  - User will start with x 
+  - User should be able to finish the game in 2 minutes time or else the user with the most points wins

@@ -1,0 +1,8 @@
+Project Title: Maze Gaze (WIP)
+
+Project Description: Maze Gaze (WIP) is a multiplayer Pac-Man like game, where users can join a lobby and compete against other users to see who can eat the most pellets in the shortest amount of time.
+The gametimes are intentionally short that way the user can play the game as a short break.
+
+Target Audience: The target audience for the game currently is anyone with a desktop device who enjoys retro style games with a competitive twist.
+
+Team Members: Tyree Webber, Naman Dhalla, Syed Hamza Asim

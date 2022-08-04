@@ -1,0 +1,10 @@
+Tech Stack
+  - JavaScript
+  - HTML
+  - CSS
+  - Phaser (game frame-work)
+  - Socket.io
+  - React(??)
+
+Hosting
+  - Firebase / Heroku
