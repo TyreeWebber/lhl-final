@@ -9,3 +9,12 @@ User Stories
   - User cannot eat other powered users
   - User will start with x 
   - User should be able to finish the game in 2 minutes time or else the user with the most points wins
+
+Stretch
+  - User decided score/time limit
+  - Kill feed
+  - Character selection
+  - Invite links and joinable games
+  - Profile settings
+  - live game/end game chat
+  - different maps/maze layouts
