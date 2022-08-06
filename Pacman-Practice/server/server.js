@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000;
 let app = express();
 let server = http.createServer(app);
 let io = socketIO(server);
+let players = {};
 
 app.use(express.static(publicPath));
 
@@ -18,6 +19,11 @@ server.listen(port, () => {
 
 io.on('connection', (socket) => {
   socket.emit('Player Joined', {data: io.engine.clientsCount})
+  console.log('A player has connected')
+  socket.on('player', data =>{
+    console.log('player:', data);
+  })
+  
   socket.on('disconnect', () => {
     console.log('A user has disconnected')
   })

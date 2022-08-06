@@ -19,28 +19,29 @@ socket.on('Move Player', key => {
   let playerChosen
   players.forEach(player => {
     if (player.id == socket.id) {
+      switch (key) {
+        case 'w':
+          player.velocity.x = 0;
+          player.velocity.y = -5;
+          break
+        case 's' :
+          player.velocity.x = 0;
+          player.velocity.y = 5;
+          break
+        case 'a' :
+          player.velocity.x = -5;
+          player.velocity.y = 0;
+          break
+        case 'd' :
+          player.velocity.x = 5;
+          player.velocity.y = 0;
+          break
+      }
       playerChosen = player
     }
   })
-  console.log(playerChosen);
-  switch (key) {
-    case 'w':
-      player.velocity.x = 0;
-      player.velocity.y = -5;
-      break
-    case 's' :
-      player.velocity.x = 0;
-      player.velocity.y = 5;
-      break
-    case 'a' :
-      player.velocity.x = -5;
-      player.velocity.y = 0;
-      break
-    case 'd' :
-      player.velocity.x = 5;
-      player.velocity.y = 0;
-      break
-  }
+  socket.emit('player', {x: playerChosen.position.x, y: playerChosen.position.y});
+  console.log(playerChosen.position.x, playerChosen.position.y);
 })
 function roundBox(num) {
   return Math.ceil(num / 1) * 1;
