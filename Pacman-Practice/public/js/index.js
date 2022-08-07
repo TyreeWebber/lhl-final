@@ -69,18 +69,22 @@ socket.on('Move Player', key => {
         case 'w':
           player.velocity.x = 0;
           player.velocity.y = -5;
+          player.image = playerImgUP;
           break
         case 's':
           player.velocity.x = 0;
           player.velocity.y = 5;
+          player.image = playerImgDown;
           break
         case 'a':
           player.velocity.x = -5;
           player.velocity.y = 0;
+          player.image = playerImgLeft;
           break
         case 'd':
           player.velocity.x = 5;
           player.velocity.y = 0;
+          player.image = playerImg;
           break
       }
       socket.emit('user velocities', player.velocity)
@@ -172,7 +176,13 @@ const ground = []
 const pellets = []
 
 const playerImg = new Image();
-playerImg.src = '../assets/player2.png'
+playerImg.src = '../assets/pacright1.png'
+const playerImgDown = new Image()
+playerImgDown.src = '../assets/pacdown1.png'
+const playerImgUP = new Image()
+playerImgUP.src = '../assets/pacup1.png'
+const playerImgLeft = new Image()
+playerImgLeft.src = '../assets/pacleft1.png'
 const wallImg = new Image();
 wallImg.src = '../assets/wall.png'
 const groundImg = new Image();
