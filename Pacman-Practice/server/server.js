@@ -1,7 +1,7 @@
-const path = require ('path');
+const path = require('path');
 const http = require('http');
 const express = require('express');
-const socketIO  = require('socket.io');
+const socketIO = require('socket.io');
 const { kMaxLength } = require('buffer');
 
 const publicPath = path.join(__dirname, '../public')
@@ -19,16 +19,34 @@ server.listen(port, () => {
 
 io.on('connection', (socket) => {
   socket.emit('Player Joined', {data: io.engine.clientsCount})
-  console.log('A player has connected')
-  socket.on('player', data =>{
-    console.log('player:', data);
+
+  socket.on('newPlayer', data => {
+    console.log("New client connected, with id: " + socket.id);
+    players[socket.id] = data;
+    // console.log("Starting position: " + players[socket.id].position.x + " - " + players[socket.id].position.y);
+    console.log("Current number of players: " + Object.keys(players).length);
+    console.log("players dictionary: ", players);
+    io.emit('redrawPlayers', players);
   })
-  
+
+
   socket.on('disconnect', () => {
-    console.log('A user has disconnected')
+    delete players[socket.id];
+    console.log("Goodbye client with id " + socket.id);
+    console.log("Current number of players: " + Object.keys(players).length);
+    io.emit('redrawPlayers', players);
   })
+
+  socket.on('user velocities', data => {
+    players[socket.id].velocity = data;
+    socket.broadcast.emit('commandUpdate', players)
+  })
+
+  socket.on("updatePlayer", (data) => {
+    // console.log(data);
+  })
+
   socket.on('Player moved', (k) => {
-    console.log(`Player pressed ${k}`)
-    socket.emit('Move Player', (k))
+    socket.emit('Move Player', (k));
   })
 })

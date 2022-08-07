@@ -5,6 +5,7 @@ const context = canvas.getContext('2d');
 const boxWidth = roundBox((canvas.width - 10) / 29);
 const boxHeight = roundBox((canvas.height - 10) / 14);
 let socket = io();
+let clientPlayers = {};
 
 socket.on('Player Joined', (f) => {
   console.log(f.data);
@@ -14,9 +15,54 @@ socket.on('Player Joined', (f) => {
 socket.on('player moved', f => {
   console.log(f.key)
 })
+const players = []
+
+socket.on('redrawPlayers', p => {
+  let playersFound = {};
+  for (let id in p) {
+    if (clientPlayers[id] === undefined && id !== socket.id) {
+      console.log('New Player detected')
+      clientPlayers[id] = new Player({
+        position: {
+          x: p[id].position.x,
+          y: p[id].position.y
+        },
+        velocity: {
+          x: p[id].velocity.x,
+          y: p[id].velocity.y
+        },
+        image: playerImg,
+        id
+      }
+      );
+      players.push(clientPlayers[id])
+    }
+    playersFound[id] = true;
+  }
+  for (let id in clientPlayers) {
+    if (!playersFound[id]) {
+      players.pop();
+      clientPlayers[id].remove();
+      delete clientBalls[id];
+    }
+  }
+})
+
+socket.on('commandUpdate', p => {
+  for (let id in p){
+    if (clientPlayers[id] !== undefined) {
+      clientPlayers[id].velocity = p[id].velocity;
+      players.forEach(player => {
+        if (player.id == p[id]){
+          player.velocity = p[id].velocity;
+        }
+      })
+    }
+  }
+})
+
 
 socket.on('Move Player', key => {
-  let playerChosen
   players.forEach(player => {
     if (player.id == socket.id) {
       switch (key) {
@@ -24,25 +70,24 @@ socket.on('Move Player', key => {
           player.velocity.x = 0;
           player.velocity.y = -5;
           break
-        case 's' :
+        case 's':
           player.velocity.x = 0;
           player.velocity.y = 5;
           break
-        case 'a' :
+        case 'a':
           player.velocity.x = -5;
           player.velocity.y = 0;
           break
-        case 'd' :
+        case 'd':
           player.velocity.x = 5;
           player.velocity.y = 0;
           break
       }
-      playerChosen = player
+      socket.emit('user velocities', player.velocity)
     }
   })
-  socket.emit('player', {x: playerChosen.position.x, y: playerChosen.position.y});
-  console.log(playerChosen.position.x, playerChosen.position.y);
 })
+
 function roundBox(num) {
   return Math.ceil(num / 1) * 1;
 }
@@ -57,20 +102,20 @@ class Player {
   }
 
   draw() {
-    context.drawImage(this.image, this.position.x - (boxWidth / 4), this.position.y - (boxWidth / 4), this.radius * 2, this.radius * 2)
+    context.drawImage(this.image, this.position.x - this.radius, this.position.y- this.radius, this.radius * 2, this.radius * 2)
   }
 
   updatePos() {
     this.draw()
-    this.position.x += this.velocity.x
-    this.position.y += this.velocity.y
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
   }
 }
 
 class Pellet {
   constructor({ position }) {
     this.position = position
-    this.radius = 3
+    this.radius = 4
   }
 
   draw() {
@@ -125,7 +170,6 @@ const map = [
 const boundaries = []
 const ground = []
 const pellets = []
-const players = []
 
 const playerImg = new Image();
 playerImg.src = '../assets/player2.png'
@@ -168,7 +212,7 @@ function createPlayer(numOfPlayer, id) {
     positiony = canvas.height - (boxHeight * 1.5)
   } else {
     positionX = boxWidth * 1.5;
-    positiony = boxWidth * 1.5;
+    positiony = boxHeight * 1.5;
   }
   players.push(new Player({
     position: {
@@ -182,7 +226,22 @@ function createPlayer(numOfPlayer, id) {
     image: playerImg,
     id
   }))
+
+  socket.emit("newPlayer", {
+    position: {
+      x: players[0].position.x,
+      y: players[0].position.y
+    },
+    velocity: {
+      x: players[0].velocity.x,
+      y: players[0].velocity.y
+    },
+    image: playerImg,
+    id
+  })
 }
+
+
 
 function move() {
   requestAnimationFrame(move);
@@ -210,14 +269,15 @@ function move() {
   })
 
   players.forEach(player => {
+    socket.emit('updatePlayer', player)
     player.updatePos();
   })
 }
 
+
 move();
 
 window.addEventListener('keydown', (f) => {
-  console.log(f.key)
   socket.emit('Player moved', (f.key))
 })
 
