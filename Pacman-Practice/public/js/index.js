@@ -87,6 +87,7 @@ socket.on('Move Player', key => {
           player.image = playerImg;
           break
       }
+      console.log(player.image);
       socket.emit('user velocities', player.velocity)
     }
   })
