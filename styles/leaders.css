@@ -1,0 +1,33 @@
+body {
+  
+  background-image: url(https://images.unsplash.com/photo-1519750783826-e2420f4d687f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJldHR5JTIwYmFja2dyb3VuZHxlbnwwfHwwfHw%3D&w=1000&q=80);
+  background-size: cover;
+  text-align: center;
+}
+
+.header {
+  font-size: xx-large;
+  font-family: cursive;
+  color: red;
+
+}
+
+.table {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-size: 34px;
+  font-family: cursive;
+  color: blue;
+  border: solid;
+  padding: 80px;
+  margin-left: 200px;
+  margin-right: 200px;
+  
+}
+
+.heading {
+  font-size: 50px;
+  font-family: cursive;
+  color: blue;
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="leaders.css" type="text/css">
+  <title>Leader Board</title>
+</head>
+
+<body class="body">
+  <header class="header">
+    <h1>The Leader's Board of Our Champions</h1>
+  </header>
+  <div class="container">
+  <table class="table">
+    <h2 class="heading">All Time Top 5:</h2>
+    <tr>
+      <th>Player</th>
+      <th>Timing</th>
+      <th>Points</th>
+    </tr>
+    <tr>
+    <% for (const score of scores) { %>
+    <td> <%= score.user_name %> </td> 
+    <td> <%= score.timing %> </td>
+    <td> <%= score.point %> </td>
+    </tr>
+    <% } %>
+  </table>
+</div>
+</body>
+
+</html>
