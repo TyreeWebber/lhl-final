@@ -16,22 +16,26 @@ db.connect();
 
 app.set("view engine", "ejs");
 
-
-
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")))
 app.use(express.static(__dirname + "/styles"));
 //trial
-app.get("/", (req, res) => {
-  res.render('index');
-})
-app.get("/game", (req, res) => {
-  res.render('game');
-})
-app.post("/game", (req, res) => {
-  db.query(`insert into scores`)
-  res.render('index');
-})
+
+app.get("/home", (req, res) => {
+  res.render("mainpage");
+});
+app.post("/home", (req, res) => {
+  res.redirect("localhost:3000");
+});
+
+
+// app.get("/game", (req, res) => {
+//   res.render('game');
+// })
+// app.post("/game", (req, res) => {
+//   db.query(`insert into scores`)
+//   res.render('index');
+// })
 
 app.get('/leaders', (req, res) => {
   db.query(`Select user_name, timing, point from scores ORDER BY timing LIMIT 5;`)
