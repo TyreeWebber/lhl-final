@@ -38,15 +38,25 @@ io.on('connection', (socket) => {
   })
 
   socket.on('user velocities', data => {
-    players[socket.id].velocity = data;
+    players[socket.id].velocity = data.velocity;
     socket.broadcast.emit('commandUpdate', players)
   })
 
-  socket.on("updatePlayer", (data) => {
-    // console.log(data);
-  })
+  // socket.on('player got power',(data)  =>{
+  //   console.log(`player with id: ${data.id} hit a powerup`)
+  //   const id = data.id;
+  //   players[id].powered = true;
+  //   socket.broadcast.emit('Powerupdate', players);
+  // })
 
   socket.on('Player moved', (k) => {
     socket.emit('Move Player', (k));
   })
+
+  // socket.on('power removed', id => {
+  //   players[id].powered = false;
+  //   console.log(players);
+  //   socket.broadcast.emit('Powerupdate', players);
+  // })
+
 })

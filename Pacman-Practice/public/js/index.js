@@ -12,9 +12,9 @@ socket.on('Player Joined', (f) => {
   createPlayer(f.data, socket.id);
 })
 
-socket.on('player moved', f => {
-  console.log(f.key)
-})
+// socket.on('player moved', f => {
+//   console.log(f.key)
+// })
 const players = []
 
 socket.on('redrawPlayers', p => {
@@ -42,18 +42,17 @@ socket.on('redrawPlayers', p => {
   for (let id in clientPlayers) {
     if (!playersFound[id]) {
       players.pop();
-      clientPlayers[id].remove();
-      delete clientBalls[id];
+      delete clientPlayers[id];
     }
   }
 })
 
 socket.on('commandUpdate', p => {
-  for (let id in p){
+  for (let id in p) {
     if (clientPlayers[id] !== undefined) {
       clientPlayers[id].velocity = p[id].velocity;
       players.forEach(player => {
-        if (player.id == p[id]){
+        if (player.id == p[id]) {
           player.velocity = p[id].velocity;
         }
       })
@@ -87,8 +86,7 @@ socket.on('Move Player', key => {
           player.image = playerImg;
           break
       }
-      console.log(player.image);
-      socket.emit('user velocities', player.velocity)
+      socket.emit('user velocities', player)
     }
   })
 })
@@ -102,12 +100,13 @@ class Player {
     this.id = id;
     this.position = position
     this.velocity = velocity
-    this.radius = 15
+    this.radius = boxWidth / 4;
     this.image = image
+    this.powered = false;
   }
 
   draw() {
-    context.drawImage(this.image, this.position.x - this.radius, this.position.y- this.radius, this.radius * 2, this.radius * 2)
+    context.drawImage(this.image, this.position.x - this.radius, this.position.y - this.radius, this.radius * 2, this.radius * 2)
   }
 
   updatePos() {
@@ -131,19 +130,20 @@ class Pellet {
     context.closePath();
   }
 }
-
-class Ground {
-  constructor({ position, image }) {
+class powerUp {
+  constructor({ position }) {
     this.position = position
-    this.width = boxWidth
-    this.height = boxHeight
-    this.image = image
+    this.radius = 6
   }
+
   draw() {
-    context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height)
+    context.beginPath()
+    context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+    context.fillStyle = 'yellow'
+    context.fill()
+    context.closePath();
   }
 }
-
 class Boundary {
   constructor({ position, image }) {
     this.position = position
@@ -163,8 +163,8 @@ const map = [
   ['-', ' ', ' ', ' ', ' ', ' ', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-', ' ', ' ', ' ', ' ', ' ', '-'],
   ['-', ' ', '-', '-', '-', ' ', '-', ' ', '-', '-', '-', '-', '-', ' ', '-', ' ', '-', '-', '-', '-', '-', ' ', '-', ' ', '-', '-', '-', ' ', '-'],
   ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
-  ['-', '-', '-', ' ', '-', '-', '-', ' ', '-', ' ', '-', ' ', '-', ' ', ' ', ' ', '-', ' ', '-', ' ', '-', ' ', '-', '-', '-', ' ', '-', '-', '-'],
-  ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-', ' ', '-', ' ', '-', ' ', ' ', ' ', '-', ' ', '-', ' ', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
+  ['-', '-', '-', ' ', '-', '-', '-', ' ', '-', ' ', '-', ' ', '-', ' ', 'p', ' ', '-', ' ', '-', ' ', '-', ' ', '-', '-', '-', ' ', '-', '-', '-'],
+  ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-', ' ', '-', ' ', '-', ' ', 'p', ' ', '-', ' ', '-', ' ', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
   ['-', ' ', '-', ' ', '-', ' ', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-', ' ', '-', ' ', '-', ' ', '-'],
   ['-', ' ', '-', ' ', '-', ' ', '-', ' ', '-', '-', '-', '-', '-', ' ', '-', ' ', '-', '-', '-', '-', '-', ' ', '-', ' ', '-', ' ', '-', ' ', '-'],
   ['-', ' ', ' ', ' ', '-', ' ', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-', ' ', '-', ' ', ' ', ' ', '-'],
@@ -175,6 +175,7 @@ const map = [
 const boundaries = []
 const ground = []
 const pellets = []
+const powerUps = []
 
 const playerImg = new Image();
 playerImg.src = '../assets/pacright1.png'
@@ -203,9 +204,15 @@ map.forEach((row, i) => {
           position: {
             x: (boxWidth * j + boxWidth / 2), y: (boxHeight * i) + boxHeight / 2
           }
-        }
-        ))
+        }))
         break;
+      case 'p':
+        powerUps.push(new powerUp({
+          position: {
+            x: (boxWidth * j + boxWidth / 2), y: (boxHeight * i) + boxHeight / 2
+          }
+        }))
+
     }
   })
 })
@@ -248,6 +255,7 @@ function createPlayer(numOfPlayer, id) {
       y: players[0].velocity.y
     },
     image: playerImg,
+    powered: false,
     id
   })
 }
@@ -267,6 +275,19 @@ function move() {
     })
   })
 
+  powerUps.forEach((powerUp, i) => {
+    powerUp.draw();
+    players.forEach(player => {
+      if (Math.hypot(powerUp.position.x - player.position.x, powerUp.position.y - player.position.y) < (powerUp.radius + player.radius)) {
+        powerUps.splice(0, powerUps.length);
+        player.powered = true;
+        setTimeout(reSpawnPowerup, 2000);
+        console.log(player);
+        setTimeout(removePower, 10000, player.id);
+      }
+    })
+  })
+
   boundaries.forEach((Boundary) => {
     Boundary.draw();
     players.forEach(player => {
@@ -280,8 +301,52 @@ function move() {
   })
 
   players.forEach(player => {
-    socket.emit('updatePlayer', player)
+    if (player.velocity.x == -5) {
+      player.image = playerImgLeft;
+    } else if (player.velocity.x == 5) {
+      player.image = playerImg;
+    } else if (player.velocity.y == 5) {
+      player.image = playerImgDown;
+    } else if (player.velocity.y == -5) {
+      player.image = playerImgUP
+    }
     player.updatePos();
+
+    players.forEach(player2 => {
+      if (Math.hypot(player.position.x - player2.position.x, player.position.y - player2.position.y) < (player.radius + player2.radius) && player.id != player2.id) {
+        console.log('collision detected');
+        if (player.powered && !player2.powered && player.id != player2.id) {
+          console.log('player 2 gets eaten')
+        } else if (!player.powered && player2.powered && player.id != player2.id) {
+          console.log('Player 1 gets eaten');
+        }
+      }
+    })
+  })
+}
+
+function reSpawnPowerup() {
+  map.forEach((row, i) => {
+    row.forEach((box, j) => {
+      switch (box) {
+        case 'p':
+          powerUps.push(new powerUp({
+            position: {
+              x: (boxWidth * j + boxWidth / 2), y: (boxHeight * i) + boxHeight / 2
+            }
+          }))
+          break
+      }
+    })
+  })
+}
+
+function removePower(ids) {
+  players.forEach(player => {
+    if (player.id == ids) {
+      player.powered = false;
+      console.log(player);
+    }
   })
 }
 
