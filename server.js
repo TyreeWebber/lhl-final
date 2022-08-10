@@ -22,6 +22,7 @@ app.set("view engine", "ejs");
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")))
 app.use(express.static(__dirname + "/styles"));
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
