@@ -4,6 +4,12 @@ canvas.height = innerHeight;
 const context = canvas.getContext('2d');
 const boxWidth = roundBox((canvas.width - 10) / 29);
 const boxHeight = roundBox((canvas.height - 10) / 14);
+const timer = document.getElementById('timer');
+let time = 100;
+
+const gameTimer =  setInterval(() => {
+  timer.innerHTML = `Time Remaining: ${time} seconds`;
+  time--;}, 1000);
 
 function roundBox(num) {
   return Math.ceil(num / 1) * 1;

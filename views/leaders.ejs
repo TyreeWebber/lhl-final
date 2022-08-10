@@ -18,13 +18,11 @@
     <h2 class="heading">All Time Top 5:</h2>
     <tr>
       <th>Player</th>
-      <th>Timing</th>
       <th>Points</th>
     </tr>
     <tr>
     <% for (const score of scores) { %>
     <td> <%= score.user_name %> </td> 
-    <td> <%= score.timing %> </td>
     <td> <%= score.point %> </td>
     </tr>
     <% } %>
