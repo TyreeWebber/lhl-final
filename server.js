@@ -16,7 +16,7 @@ const { Pool } = require('pg');
 const dbParams = require("./lib/db.js");
 const db = new Pool(dbParams);
 db.connect();
-
+// let playerName;  
 app.set("view engine", "ejs");
 
 // Set static folder
@@ -33,8 +33,9 @@ io.on('connection', (socket) => {
     console.log("New client connected, with id: " + socket.id);
     players[socket.id] = data;
     // console.log("Starting position: " + players[socket.id].position.x + " - " + players[socket.id].position.y);
-    console.log("Current number of players: " + Object.keys(players).length);
-    console.log("players dictionary: ", players);
+    // console.log("Current number of players: " + Object.keys(players).length);
+    // console.log("players dictionary: ", players);
+    console.log('playerName', playerName);
     io.emit('redrawPlayers', players);
   })
 
@@ -80,10 +81,12 @@ app.get("/", (req, res) => {
 // })
 
 app.get("/game", (req, res) => {
+  // const templateVars = { name: playerName }
   res.render('game');
 })
-app.post("/game", (req, res) => {
-  // const player = req.body.text;
+
+app.post("/game", (req, res) => {  
+  // playerName = req.body.text;
   res.redirect('/game');
 })
 
