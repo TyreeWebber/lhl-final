@@ -53,6 +53,13 @@ io.on('connection', (socket) => {
     socket.emit('Move Player', (k));
   })
 
+  socket.on('correctTurn', (player) => {
+    console.log(player.position);
+    players[socket.id].position = player.position;
+    console.log(players[socket.id]);
+    socket.broadcast.emit('UpdatePosition', players[socket.id])
+  })
+
   // socket.on('power removed', id => {
   //   players[id].powered = false;
   //   console.log(players);

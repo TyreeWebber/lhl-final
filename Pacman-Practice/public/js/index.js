@@ -60,6 +60,14 @@ socket.on('commandUpdate', p => {
   }
 })
 
+socket.on('UpdatePosition', p => {
+  players.forEach(player => {
+    if (player.id == p.id) {
+      player.position = p.position;
+    }
+  })
+})
+
 
 socket.on('Move Player', key => {
   players.forEach(player => {
@@ -281,7 +289,7 @@ function move() {
       if (Math.hypot(powerUp.position.x - player.position.x, powerUp.position.y - player.position.y) < (powerUp.radius + player.radius)) {
         powerUps.splice(0, powerUps.length);
         player.powered = true;
-        setTimeout(reSpawnPowerup, 2000);
+        setTimeout(reSpawnPowerup, 6000);
         console.log(player);
         setTimeout(removePower, 10000, player.id);
       }
@@ -314,11 +322,12 @@ function move() {
 
     players.forEach(player2 => {
       if (Math.hypot(player.position.x - player2.position.x, player.position.y - player2.position.y) < (player.radius + player2.radius) && player.id != player2.id) {
-        console.log('collision detected');
-        if (player.powered && !player2.powered && player.id != player2.id) {
-          console.log('player 2 gets eaten')
-        } else if (!player.powered && player2.powered && player.id != player2.id) {
-          console.log('Player 1 gets eaten');
+        if(player.powered == true && player2.powered == false) {
+          console.log(`${player.id} ate ${player2.id}`)
+          player2.position = {
+            x: canvas.width - (boxWidth * 1.5),
+            y: canvas.height - (boxHeight * 1.5)
+          }
         }
       }
     })
@@ -353,7 +362,20 @@ function removePower(ids) {
 
 move();
 
+function syncLocation() {
+  let currentPlayer;
+  players.forEach(player => {
+    if (socket.id == player.id) {
+      currentPlayer = player;
+      socket.emit('correctTurn', currentPlayer);
+    }
+  })
+}
+
+
+
 window.addEventListener('keydown', (f) => {
+  setTimeout(syncLocation, 100);
   socket.emit('Player moved', (f.key))
 })
 
