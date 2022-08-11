@@ -1,22 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-  
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>(GAME NAME PLACEHOLDER)</title>
+  <title>Dino Battle Royale</title>
   <link rel="stylesheet" href="game.css" type="text/css">
 </head>
+
 <body>
   <div>
-    <h1>Game page</h1>
-    <h1> Player Name: <%= name %> </h1>
-    <h1 id="timer"></h1>
+    <div class="title">
+      <h1>Dino Battle Royale</h1>
+    </div>
+    <div class="player-info">
+      <h1> Player Name:&nbsp;</h1>
+      <h1 id="name">
+        <%= name %>
+      </h1>
+    </div>
+    <div class="game-info">
+      <h1 id="timer"></h1>
+      <h1 id="score"></h1>
+    </div>
   </div>
-  <button type="btn" id="starter">Ready Steady Go!</button>
+  <div class="button">
+    <button type="btn" id="starter">Ready Steady Go!</button>
+  </div>
+  <dialog open id="dialog">
+    Game Over!
+    <a  href="http://localhost:3001/leaders">
+      Check out the scores
+    </a>
+  </dialog>
   <canvas></canvas>
   <script src="/socket.io/socket.io.js"></script>
   <script src="index.js"></script>
 </body>
+
 </html>

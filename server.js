@@ -16,7 +16,7 @@ const { Pool } = require('pg');
 const dbParams = require("./lib/db.js");
 const db = new Pool(dbParams);
 db.connect();
-let playerName;  
+let playerName;
 app.set("view engine", "ejs");
 
 // Set static folder
@@ -27,8 +27,14 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+
 io.on('connection', (socket) => {
-  socket.emit('Player Joined', {data: io.engine.clientsCount})
+
+  socket.on('start Game', () => {
+    socket.broadcast.emit('START');
+  });
+
+  socket.emit('Player Joined', { data: io.engine.clientsCount })
 
   socket.on('newPlayer', data => {
     console.log("New client connected, with id: " + socket.id);
@@ -52,24 +58,19 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('commandUpdate', players)
   })
 
-  // socket.on('player got power',(data)  =>{
-  //   console.log(`player with id: ${data.id} hit a powerup`)
-  //   const id = data.id;
-  //   players[id].powered = true;
-  //   socket.broadcast.emit('Powerupdate', players);
-  // })
+  socket.on('game finished', (player) => {
+    db.query(`INSERT INTO scores (user_name, point) 
+    VALUES (${player.name}, ${player.score};`)
+  })
 
   socket.on('Player moved', (k) => {
     socket.emit('Move Player', (k));
   })
 
-  // socket.on('power removed', id => {
-  //   players[id].powered = false;
-  //   console.log(players);
-  //   socket.broadcast.emit('Powerupdate', players);
-  // })
 
-})
+});
+
+
 
 //Routes
 app.get("/", (req, res) => {
@@ -91,14 +92,14 @@ app.post("/game", (req, res) => {
 
 
 app.get('/leaders', (req, res) => {
-  db.query(`Select user_name, point from scores ORDER BY point LIMIT 5;`)
-  .then((data)=>{
-    const templateVars = { scores: data.rows };
-    res.render("leaders", templateVars);
-  })
-  .catch((err) => {
-    res.status(404).send(err.message);
-  })
+  db.query(`Select user_name, point from scores ORDER BY point;`)
+    .then((data) => {
+      const templateVars = { scores: data.rows };
+      res.render("leaders", templateVars);
+    })
+    .catch((err) => {
+      res.status(404).send(err.message);
+    })
 });
 
 

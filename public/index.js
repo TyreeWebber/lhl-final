@@ -5,12 +5,21 @@ const context = canvas.getContext('2d');
 const boxWidth = roundBox((canvas.width - 10) / 29);
 const boxHeight = roundBox((canvas.height - 10) / 14);
 const timer = document.getElementById('timer');
+const score = document.getElementById('score');
+const playerName = document.getElementById('name').textContent;
+const dialog = document.getElementById('dialog');
+const button = document.getElementById('starter');
 let time = 10;
-
 let socket = io();
 let clientPlayers = {};
 
-const button = document.getElementById('starter');
+
+
+socket.on('START', () => {
+  button.style.display = 'none';
+  gameTimer();
+  move();
+})
 
 
 const gameTimer = function() {
@@ -20,6 +29,13 @@ const gameTimer = function() {
       if (time < 0) {
         clearInterval(counter);
         timer.innerHTML = `Game Over! You are out of time`;
+        dialog.style.display = 'block';
+        players.forEach( (player) => {
+          if (player.id == socket.id) {
+            socket.emit('game finished', player)
+
+          }
+        })
       }
     }, 1000);
   };
@@ -122,6 +138,7 @@ class Player {
     this.image = image
     this.powered = false;
     this.score = 0;
+    this.name = playerName;
   }
   
   draw() {
@@ -321,7 +338,8 @@ function move() {
     players.forEach(player => {
       if (Math.hypot(pellet.position.x - player.position.x, pellet.position.y - player.position.y) < (pellet.radius + player.radius)) {
         player.score += 10;
-        console.log(player.id, ":" , player.score, "points");
+        score.innerHTML = `Your Points: ${player.score}`
+        // console.log(player.id, ":" , player.score, "points");
         pellets.splice(i, 1);
       }
     })
@@ -405,6 +423,8 @@ function removePower(ids) {
 }
 
 button.addEventListener('click', () => {
+  socket.emit('start Game');
+  button.style.display = 'none';
   gameTimer();
   move();
 });
