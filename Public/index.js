@@ -39,7 +39,7 @@ socket.on('redrawPlayers', p => {
           x: p[id].velocity.x,
           y: p[id].velocity.y
         },
-        image: playerImg,
+        image: rightMovement,
         id
       }
       );
@@ -76,22 +76,22 @@ socket.on('Move Player', key => {
         case 'w':
           player.velocity.x = 0;
           player.velocity.y = -5;
-          player.image = playerImgUP;
+          player.image = upMovement;
           break
         case 's':
           player.velocity.x = 0;
           player.velocity.y = 5;
-          player.image = playerImgDown;
+          player.image = downMovement;
           break
         case 'a':
           player.velocity.x = -5;
           player.velocity.y = 0;
-          player.image = playerImgLeft;
+          player.image = leftMovement;
           break
         case 'd':
           player.velocity.x = 5;
           player.velocity.y = 0;
-          player.image = playerImg;
+          player.image = rightMovement;
           break
       }
       socket.emit('user velocities', player)
@@ -103,6 +103,7 @@ function roundBox(num) {
   return Math.ceil(num / 1) * 1;
 }
 
+let i = 0;
 class Player {
   constructor({ position, velocity, image, id }) {
     this.id = id;
@@ -112,9 +113,14 @@ class Player {
     this.image = image
     this.powered = false;
   }
-
+  
   draw() {
-    context.drawImage(this.image, this.position.x - this.radius, this.position.y - this.radius, this.radius * 2, this.radius * 2)
+   context.drawImage(this.image[i], this.position.x - this.radius, this.position.y - this.radius, this.radius * 2, this.radius * 2)
+   if (i == 0) {
+    i++;
+  } else if (i == 1) {
+    i--;
+   }
   }
 
   updatePos() {
@@ -185,18 +191,42 @@ const ground = []
 const pellets = []
 const powerUps = []
 
-const playerImg = new Image();
-playerImg.src = '../assets/pacright1.png'
-const playerImgDown = new Image()
-playerImgDown.src = '../assets/pacdown1.png'
-const playerImgUP = new Image()
-playerImgUP.src = '../assets/pacup1.png'
-const playerImgLeft = new Image()
-playerImgLeft.src = '../assets/pacleft1.png'
+
+// const playerImgDown = new Image()
+// playerImgDown.src = '../assets/pacdown1.png'
+// const playerImgUP = new Image()
+// playerImgUP.src = '../assets/pacup1.png'
+// const playerImgLeft = new Image()
+// playerImgLeft.src = '../assets/pacleft1.png'
 const wallImg = new Image();
 wallImg.src = '../assets/wall.png'
 const groundImg = new Image();
 groundImg.src = '../assets/ground2.png'
+
+const pacRight1 = new Image();
+pacRight1.src = '../assets/pacright(1).png'
+const pacRight2 = new Image ();
+pacRight2.src = '../assets/pacright(2).png'
+
+const pacDown1 = new Image();
+pacDown1.src = '../assets/pacdown(1).png'
+const pacDown2 = new Image();
+pacDown2.src = '../assets/pacdown(2).png'
+
+const pacLeft1 = new Image();
+pacLeft1.src = '../assets/pacleft(1).png'
+const PacLeft2 = new Image();
+PacLeft2.src = '../assets/pacleft(2).png'
+
+const pacUp1 = new Image();
+pacUp1.src = '../assets/pacup(1).png'
+const pacUp2 = new Image();
+pacUp2.src = '../assets/pacup(2).png'
+
+const rightMovement = [pacRight1, pacRight2];
+const upMovement = [pacUp1, pacUp2];
+const downMovement = [pacDown1, pacDown2];
+const leftMovement = [pacLeft1, PacLeft2];
 
 map.forEach((row, i) => {
   row.forEach((box, j) => {
@@ -229,6 +259,8 @@ boundaries.forEach((Boundary) => {
   Boundary.draw();
 })
 
+let imagesArray;
+
 
 function createPlayer(numOfPlayer, id) {
   let positionX;
@@ -249,7 +281,7 @@ function createPlayer(numOfPlayer, id) {
       x: 0,
       y: 0
     },
-    image: playerImg,
+    image: rightMovement,
     id
   }))
 
@@ -262,7 +294,7 @@ function createPlayer(numOfPlayer, id) {
       x: players[0].velocity.x,
       y: players[0].velocity.y
     },
-    image: playerImg,
+    image: rightMovement,
     powered: false,
     id
   })
@@ -310,13 +342,13 @@ function move() {
 
   players.forEach(player => {
     if (player.velocity.x == -5) {
-      player.image = playerImgLeft;
+      player.image = leftMovement;
     } else if (player.velocity.x == 5) {
-      player.image = playerImg;
+      player.image = rightMovement;
     } else if (player.velocity.y == 5) {
-      player.image = playerImgDown;
+      player.image = downMovement;
     } else if (player.velocity.y == -5) {
-      player.image = playerImgUP
+      player.image = upMovement;
     }
     player.updatePos();
 
@@ -364,4 +396,5 @@ move();
 window.addEventListener('keydown', (f) => {
   socket.emit('Player moved', (f.key))
 })
+
 
