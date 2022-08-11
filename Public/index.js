@@ -207,21 +207,21 @@ const pacRight1 = new Image();
 pacRight1.src = '../assets/pacright(1).png'
 const pacRight2 = new Image ();
 pacRight2.src = '../assets/pacright(2).png'
-
 const pacDown1 = new Image();
 pacDown1.src = '../assets/pacdown(1).png'
 const pacDown2 = new Image();
 pacDown2.src = '../assets/pacdown(2).png'
-
 const pacLeft1 = new Image();
 pacLeft1.src = '../assets/pacleft(1).png'
 const PacLeft2 = new Image();
 PacLeft2.src = '../assets/pacleft(2).png'
-
 const pacUp1 = new Image();
 pacUp1.src = '../assets/pacup(1).png'
 const pacUp2 = new Image();
 pacUp2.src = '../assets/pacup(2).png'
+
+const deathSound = new Audio();
+deathSound.src = '../assets/death.mp3'
 
 const rightMovement = [pacRight1, pacRight2];
 const upMovement = [pacUp1, pacUp2];
@@ -357,8 +357,10 @@ function move() {
         console.log('collision detected');
         if (player.powered && !player2.powered && player.id != player2.id) {
           console.log('player 2 gets eaten')
+          deathSound.play();
         } else if (!player.powered && player2.powered && player.id != player2.id) {
           console.log('Player 1 gets eaten');
+          deathSound.play();
         }
       }
     })
