@@ -131,6 +131,7 @@ class Player {
   } else if (i == 1) {
     i--;
    }
+   console.log(i)
   }
 
   updatePos() {
