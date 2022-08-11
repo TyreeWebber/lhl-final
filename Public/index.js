@@ -119,6 +119,7 @@ class Player {
     this.radius = boxWidth / 4;
     this.image = image
     this.powered = false;
+    this.score = 0;
   }
 
   draw() {
