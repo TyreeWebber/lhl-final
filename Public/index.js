@@ -5,15 +5,24 @@ const context = canvas.getContext('2d');
 const boxWidth = roundBox((canvas.width - 10) / 29);
 const boxHeight = roundBox((canvas.height - 10) / 14);
 const timer = document.getElementById('timer');
-let time = 100;
+let time = 10;
 
 let socket = io();
 let clientPlayers = {};
 
-const gameTimer = setInterval(() => {
-  timer.innerHTML = `Time Remaining: ${time} seconds`;
-  time--;
-}, 1000);
+const button = document.getElementById('starter');
+
+
+const gameTimer = function() {
+      const counter = setInterval(() => {
+      timer.innerHTML = `Time Remaining: ${time} seconds`;
+      time--;
+      if (time < 0) {
+        clearInterval(counter);
+        timer.innerHTML = `Game Over! You are out of time`;
+      }
+    }, 1000);
+  };
 
 socket.on('Player Joined', (f) => {
   console.log(f.data);
@@ -356,10 +365,15 @@ function removePower(ids) {
       console.log(player);
     }
   })
-}
+};
 
 
-move();
+button.addEventListener('click', () => {
+  gameTimer();
+  move();
+});
+
+
 
 window.addEventListener('keydown', (f) => {
   socket.emit('Player moved', (f.key))

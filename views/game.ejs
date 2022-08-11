@@ -11,9 +11,10 @@
 <body>
   <div class="stats">
     <h1>Game page</h1>
+    <h1> Player Name: <%= name %> </h1>
     <h1 id="timer"></h1>
-    <button type="btn">Ready Steady Go!</button>
   </div>
+  <button type="btn" id="starter">Ready Steady Go!</button>
   <canvas></canvas>
   <script src="/socket.io/socket.io.js"></script>
   <script src="index.js"></script>
