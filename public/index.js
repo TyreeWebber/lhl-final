@@ -121,6 +121,7 @@ class Player {
     this.radius = boxWidth / 4;
     this.image = image
     this.powered = false;
+    this.score = 0;
   }
   
   draw() {
@@ -319,6 +320,8 @@ function move() {
     pellet.draw();
     players.forEach(player => {
       if (Math.hypot(pellet.position.x - player.position.x, pellet.position.y - player.position.y) < (pellet.radius + player.radius)) {
+        player.score += 10;
+        console.log(player.id, ":" , player.score, "points");
         pellets.splice(i, 1);
       }
     })
@@ -330,7 +333,7 @@ function move() {
       if (Math.hypot(powerUp.position.x - player.position.x, powerUp.position.y - player.position.y) < (powerUp.radius + player.radius)) {
         powerUps.splice(0, powerUps.length);
         player.powered = true;
-        setTimeout(reSpawnPowerup, 2000);
+        setTimeout(reSpawnPowerup, 10000);
         console.log(player);
         setTimeout(removePower, 10000, player.id);
       }
@@ -363,13 +366,13 @@ function move() {
 
     players.forEach(player2 => {
       if (Math.hypot(player.position.x - player2.position.x, player.position.y - player2.position.y) < (player.radius + player2.radius) && player.id != player2.id) {
-        console.log('collision detected');
-        if (player.powered && !player2.powered && player.id != player2.id) {
-          console.log('player 2 gets eaten')
+        if(player.powered == true && player2.powered == false) {
           deathSound.play();
-        } else if (!player.powered && player2.powered && player.id != player2.id) {
-          console.log('Player 1 gets eaten');
-          deathSound.play();
+          console.log(`${player.id} ate ${player2.id}`)
+          player2.position = {
+            x: canvas.width - (boxWidth * 1.5),
+            y: canvas.height - (boxHeight * 1.5)
+          }
         }
       }
     })
@@ -409,7 +412,25 @@ button.addEventListener('click', () => {
 
 
 window.addEventListener('keydown', (f) => {
+  setTimeout(syncLocation, 100);
   socket.emit('Player moved', (f.key))
 })
 
+socket.on('UpdatePosition', p => {
+  players.forEach(player => {
+    if (player.id == p.id) {
+      player.position = p.position;
+    }
+  })
+})
+
+function syncLocation() {
+  let currentPlayer;
+  players.forEach(player => {
+    if (socket.id == player.id) {
+      currentPlayer = player;
+      socket.emit('correctTurn', currentPlayer);
+    }
+  })
+}
 
