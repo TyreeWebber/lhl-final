@@ -16,7 +16,7 @@ const { Pool } = require('pg');
 const dbParams = require("./lib/db.js");
 const db = new Pool(dbParams);
 db.connect();
-
+let playerName;  
 app.set("view engine", "ejs");
 
 // Set static folder
@@ -81,10 +81,11 @@ app.get("/", (req, res) => {
 // })
 
 app.get("/game", (req, res) => {
-  res.render('game');
+  const templateVars = { name: playerName }
+  res.render('game', templateVars);
 })
 app.post("/game", (req, res) => {
-  // const player = req.body.text;
+  playerName = req.body.text;
   res.redirect('/game');
 })
 

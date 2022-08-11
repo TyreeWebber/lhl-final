@@ -5,15 +5,24 @@ const context = canvas.getContext('2d');
 const boxWidth = roundBox((canvas.width - 10) / 29);
 const boxHeight = roundBox((canvas.height - 10) / 14);
 const timer = document.getElementById('timer');
-let time = 100;
+let time = 10;
 
 let socket = io();
 let clientPlayers = {};
 
-const gameTimer = setInterval(() => {
-  timer.innerHTML = `Time Remaining: ${time} seconds`;
-  time--;
-}, 1000);
+const button = document.getElementById('starter');
+
+
+const gameTimer = function() {
+      const counter = setInterval(() => {
+      timer.innerHTML = `Time Remaining: ${time} seconds`;
+      time--;
+      if (time < 0) {
+        clearInterval(counter);
+        timer.innerHTML = `Game Over! You are out of time`;
+      }
+    }, 1000);
+  };
 
 socket.on('Player Joined', (f) => {
   console.log(f.data);
@@ -191,6 +200,13 @@ const ground = []
 const pellets = []
 const powerUps = []
 
+
+// const playerImgDown = new Image()
+// playerImgDown.src = '../assets/pacdown1.png'
+// const playerImgUP = new Image()
+// playerImgUP.src = '../assets/pacup1.png'
+// const playerImgLeft = new Image()
+// playerImgLeft.src = '../assets/pacleft1.png'
 const wallImg = new Image();
 wallImg.src = '../assets/wall.png'
 const groundImg = new Image();
@@ -385,8 +401,12 @@ function removePower(ids) {
   })
 }
 
+button.addEventListener('click', () => {
+  gameTimer();
+  move();
+});
 
-move();
+
 
 window.addEventListener('keydown', (f) => {
   socket.emit('Player moved', (f.key))
