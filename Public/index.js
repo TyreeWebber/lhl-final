@@ -192,12 +192,6 @@ const pellets = []
 const powerUps = []
 
 
-// const playerImgDown = new Image()
-// playerImgDown.src = '../assets/pacdown1.png'
-// const playerImgUP = new Image()
-// playerImgUP.src = '../assets/pacup1.png'
-// const playerImgLeft = new Image()
-// playerImgLeft.src = '../assets/pacleft1.png'
 const wallImg = new Image();
 wallImg.src = '../assets/wall.png'
 const groundImg = new Image();
