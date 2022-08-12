@@ -5,6 +5,9 @@ body {
   color: bisque;
 }
 
+canvas {
+  width: 1000px;
+}
 
 .title {
   text-align: center;

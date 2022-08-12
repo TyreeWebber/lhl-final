@@ -33,6 +33,8 @@ app.use(bodyParser.urlencoded({
 
 io.on('connection', (socket) => {
 
+  i = 0;
+
   socket.on('start Game', () => {
     socket.broadcast.emit('START');
   });
@@ -61,6 +63,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('game finished', (player) => {
+ 
     resultName[i] = player.name;
     resultpoints[i] = player.score;
     i++;
@@ -94,7 +97,8 @@ app.post("/game", (req, res) => {
 })
 
 app.get('/leaders', (req, res) => {
-  const templateVars = { player1: resultName[0], points1: resultpoints[0], player2: resultName[1], points2: resultpoints[1] }
+  let templateVars = {};
+  templateVars = { player1: resultName[0], points1: resultpoints[0], player2: resultName[1], points2: resultpoints[1] }
   res.render('leaders', templateVars);
 });
 
