@@ -395,6 +395,7 @@ function move() {
     } else if (player.velocity.y == -5) {
       player.image = upMovement;
     }
+    syncLocation();
     player.updatePos();
 
     players.forEach(player2 => {
@@ -447,7 +448,6 @@ button.addEventListener('click', () => {
 
 
 window.addEventListener('keydown', (f) => {
-  setTimeout(syncLocation, 10);
   socket.emit('Player moved', (f.key))
 })
 
@@ -455,6 +455,7 @@ socket.on('UpdatePosition', p => {
   players.forEach(player => {
     if (player.id == p.id) {
       player.position = p.position;
+      console.log('works');
     }
   })
 })
