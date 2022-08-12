@@ -143,12 +143,11 @@ class Player {
   
   draw() {
    context.drawImage(this.image[i], this.position.x - this.radius, this.position.y - this.radius, this.radius * 2, this.radius * 2)
-   if (i == 0) {
+   if (i < 7) {
     i++;
-  } else if (i == 1) {
-    i--;
+  } else if (i == 7) {
+    i = 1;
    }
-   console.log(i)
   }
 
   updatePos() {
@@ -261,7 +260,7 @@ powerUp2.src = '../assets/power/powerup(2).png'
 const deathSound = new Audio();
 deathSound.src = '../assets/audio/death.mp3'
 
-const rightMovement = [pacRight1, pacRight2];
+const rightMovement = [pacRight1, pacRight1, pacRight1, pacRight1, pacRight2, pacRight2, pacRight2, pacRight2];
 const upMovement = [pacUp1, pacUp2];
 const downMovement = [pacDown1, pacDown2];
 const leftMovement = [pacLeft1, PacLeft2];
@@ -353,8 +352,9 @@ function move() {
     players.forEach(player => {
       if (Math.hypot(pellet.position.x - player.position.x, pellet.position.y - player.position.y) < (pellet.radius + player.radius)) {
         player.score += 10;
-        score.innerHTML = `Your Points: ${player.score}`
-        // console.log(player.id, ":" , player.score, "points");
+        if (player.id == socket.id) {
+          score.innerHTML = `Your Points: ${player.score}`
+        }
         pellets.splice(i, 1);
       }
     })
