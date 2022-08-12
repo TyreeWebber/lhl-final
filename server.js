@@ -15,10 +15,10 @@ let resultName = [];
 let resultpoints = [];
 let i = 0;
 
-const { Pool } = require('pg');
-const dbParams = require("./lib/db.js");
-const db = new Pool(dbParams);
-db.connect();
+// const { Pool } = require('pg');
+// const dbParams = require("./lib/db.js");
+// const db = new Pool(dbParams);
+// db.connect();
 let playerName;
 app.set("view engine", "ejs");
 
