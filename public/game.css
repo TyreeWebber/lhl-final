@@ -5,6 +5,10 @@ body {
   color: bisque;
 }
 
+.canvas {
+  text-align: center;
+}
+
 canvas {
   width: 1000px;
 }
