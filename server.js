@@ -70,6 +70,11 @@ io.on('connection', (socket) => {
     socket.emit('Move Player', (k));
   })
 
+  socket.on('correctTurn', (player) => {
+    players[socket.id].position = player.position;
+    socket.broadcast.emit('UpdatePosition', players[socket.id])
+  })
+
 });
 
 

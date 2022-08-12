@@ -143,12 +143,11 @@ class Player {
   
   draw() {
    context.drawImage(this.image[i], this.position.x - this.radius, this.position.y - this.radius, this.radius * 2, this.radius * 2)
-   if (i == 0) {
+   if (i < 7) {
     i++;
-  } else if (i == 1) {
-    i--;
+  } else if (i == 7) {
+    i = 1;
    }
-   console.log(i)
   }
 
   updatePos() {
@@ -219,42 +218,56 @@ const ground = []
 const pellets = []
 const powerUps = []
 
-
-// const playerImgDown = new Image()
-// playerImgDown.src = '../assets/pacdown1.png'
-// const playerImgUP = new Image()
-// playerImgUP.src = '../assets/pacup1.png'
-// const playerImgLeft = new Image()
-// playerImgLeft.src = '../assets/pacleft1.png'
 const wallImg = new Image();
 wallImg.src = '../assets/wall.png'
 const groundImg = new Image();
 groundImg.src = '../assets/ground2.png'
 
 const pacRight1 = new Image();
-pacRight1.src = '../assets/pacright(1).png'
+pacRight1.src = '../assets/blue/pacright(1).png'
 const pacRight2 = new Image ();
-pacRight2.src = '../assets/pacright(2).png'
+pacRight2.src = '../assets/blue/pacright(2).png'
 const pacDown1 = new Image();
-pacDown1.src = '../assets/pacdown(1).png'
+pacDown1.src = '../assets/blue/pacdown(1).png'
 const pacDown2 = new Image();
-pacDown2.src = '../assets/pacdown(2).png'
+pacDown2.src = '../assets/blue/pacdown(2).png'
 const pacLeft1 = new Image();
-pacLeft1.src = '../assets/pacleft(1).png'
+pacLeft1.src = '../assets/blue/pacleft(1).png'
 const PacLeft2 = new Image();
-PacLeft2.src = '../assets/pacleft(2).png'
+PacLeft2.src = '../assets/blue/pacleft(2).png'
 const pacUp1 = new Image();
-pacUp1.src = '../assets/pacup(1).png'
+pacUp1.src = '../assets/blue/pacup(1).png'
 const pacUp2 = new Image();
-pacUp2.src = '../assets/pacup(2).png'
+pacUp2.src = '../assets/blue/pacup(2).png'
+
+const powerRight1 = new Image();
+powerRight1.src = '../assets/power/powerright(1).png'
+const powerRight2 = new Image();
+powerRight2.src = '../assets/power/powerright(2).png'
+const powerDown1 = new Image();
+powerDown1.src = '../assets/power/powerdown(1).png'
+const powerDown2 = new Image();
+powerDown2.src = '../assets/power/powerdown(2).png'
+const powerLeft1 = new Image ();
+powerLeft1.src = '../assets/power/powerleft(1).png'
+const powerLeft2 = new Image();
+powerLeft2.src = '../assets/power/powerleft(2).png'
+const powerUp1 = new Image ();
+powerUp1.src = '../assets/power/powerup(1).png'
+const powerUp2 = new Image ();
+powerUp2.src = '../assets/power/powerup(2).png'
 
 const deathSound = new Audio();
-deathSound.src = '../assets/death.mp3'
+deathSound.src = '../assets/audio/death.mp3'
 
-const rightMovement = [pacRight1, pacRight2];
-const upMovement = [pacUp1, pacUp2];
-const downMovement = [pacDown1, pacDown2];
-const leftMovement = [pacLeft1, PacLeft2];
+const rightMovement = [pacRight1, pacRight1, pacRight1, pacRight1, pacRight2, pacRight2, pacRight2, pacRight2];
+const upMovement = [pacUp1, pacUp1, pacUp1, pacUp1, pacUp2, pacUp2, pacUp2, pacUp2];
+const downMovement = [pacDown1, pacDown1, pacDown1, pacDown1, pacDown2, pacDown2, pacDown2, pacDown2];
+const leftMovement = [pacLeft1, pacLeft1, pacLeft1, pacLeft1, PacLeft2, PacLeft2, PacLeft2, PacLeft2];
+const rightPower = [powerRight1, powerRight1, powerRight1, powerRight1, powerRight2, powerRight2, powerRight2, powerRight2];
+const upPower = [powerUp1, powerUp1, powerUp1, powerUp1, powerUp2, powerUp2, powerUp2, powerUp2];
+const downPower = [powerDown1, powerDown1, powerDown1, powerDown1, powerDown2, powerDown2, powerDown2, powerDown2];
+const leftPower = [powerLeft1, powerLeft1, powerLeft1, powerLeft1, powerLeft2, powerLeft2, powerLeft2, powerLeft2];
 
 map.forEach((row, i) => {
   row.forEach((box, j) => {
@@ -339,8 +352,9 @@ function move() {
     players.forEach(player => {
       if (Math.hypot(pellet.position.x - player.position.x, pellet.position.y - player.position.y) < (pellet.radius + player.radius)) {
         player.score += 10;
-        score.innerHTML = `Your Points: ${player.score}`
-        // console.log(player.id, ":" , player.score, "points");
+        if (player.id == socket.id) {
+          score.innerHTML = `Your Points: ${player.score}`
+        }
         pellets.splice(i, 1);
       }
     })
