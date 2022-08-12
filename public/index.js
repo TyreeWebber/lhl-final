@@ -261,13 +261,13 @@ const deathSound = new Audio();
 deathSound.src = '../assets/audio/death.mp3'
 
 const rightMovement = [pacRight1, pacRight1, pacRight1, pacRight1, pacRight2, pacRight2, pacRight2, pacRight2];
-const upMovement = [pacUp1, pacUp2];
-const downMovement = [pacDown1, pacDown2];
-const leftMovement = [pacLeft1, PacLeft2];
-const rightPower = [powerRight1, powerRight2];
-const upPower = [powerUp1, powerUp2];
-const downPower = [powerDown1, powerDown2];
-const leftPower = [powerLeft1, powerLeft2];
+const upMovement = [pacUp1, pacUp1, pacUp1, pacUp1, pacUp2, pacUp2, pacUp2, pacUp2];
+const downMovement = [pacDown1, pacDown1, pacDown1, pacDown1, pacDown2, pacDown2, pacDown2, pacDown2];
+const leftMovement = [pacLeft1, pacLeft1, pacLeft1, pacLeft1, PacLeft2, PacLeft2, PacLeft2, PacLeft2];
+const rightPower = [powerRight1, powerRight1, powerRight1, powerRight1, powerRight2, powerRight2, powerRight2, powerRight2];
+const upPower = [powerUp1, powerUp1, powerUp1, powerUp1, powerUp2, powerUp2, powerUp2, powerUp2];
+const downPower = [powerDown1, powerDown1, powerDown1, powerDown1, powerDown2, powerDown2, powerDown2, powerDown2];
+const leftPower = [powerLeft1, powerLeft1, powerLeft1, powerLeft1, powerLeft2, powerLeft2, powerLeft2, powerLeft2];
 
 map.forEach((row, i) => {
   row.forEach((box, j) => {
