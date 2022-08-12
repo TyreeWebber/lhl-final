@@ -447,7 +447,7 @@ button.addEventListener('click', () => {
 
 
 window.addEventListener('keydown', (f) => {
-  setTimeout(syncLocation, 100);
+  setTimeout(syncLocation, 10);
   socket.emit('Player moved', (f.key))
 })
 
