@@ -11,6 +11,9 @@ const io = socketIO(server)
 const bodyParser = require('body-parser')
 const { kMaxLength } = require('buffer');
 let players = {};
+let resultName = [];
+let resultpoints = [];
+let i = 0;
 
 const { Pool } = require('pg');
 const dbParams = require("./lib/db.js");
@@ -39,7 +42,6 @@ io.on('connection', (socket) => {
   socket.on('newPlayer', data => {
     console.log("New client connected, with id: " + socket.id);
     players[socket.id] = data;
-    // console.log("Starting position: " + players[socket.id].position.x + " - " + players[socket.id].position.y);
     console.log("Current number of players: " + Object.keys(players).length);
     console.log("players dictionary: ", players);
     io.emit('redrawPlayers', players);
@@ -59,14 +61,14 @@ io.on('connection', (socket) => {
   })
 
   socket.on('game finished', (player) => {
-    db.query(`INSERT INTO scores (user_name, point) 
-    VALUES (${player.name}, ${player.score};`)
+    resultName[i] = player.name;
+    resultpoints[i] = player.score;
+    i++;
   })
 
   socket.on('Player moved', (k) => {
     socket.emit('Move Player', (k));
   })
-
 
 });
 
@@ -76,10 +78,6 @@ io.on('connection', (socket) => {
 app.get("/", (req, res) => {
   res.render("mainpage");
 });
-// app.post("/", (req, res) => {
-//   // const player = req.body.text;
-//   res.redirect('/game');
-// })
 
 app.get("/game", (req, res) => {
   const templateVars = { name: playerName }
@@ -90,16 +88,9 @@ app.post("/game", (req, res) => {
   res.redirect('/game');
 })
 
-
 app.get('/leaders', (req, res) => {
-  db.query(`Select user_name, point from scores ORDER BY point;`)
-    .then((data) => {
-      const templateVars = { scores: data.rows };
-      res.render("leaders", templateVars);
-    })
-    .catch((err) => {
-      res.status(404).send(err.message);
-    })
+  const templateVars = { player1: resultName[0], points1: resultpoints[0], player2: resultName[1], points2: resultpoints[1] }
+  res.render('leaders', templateVars);
 });
 
 
