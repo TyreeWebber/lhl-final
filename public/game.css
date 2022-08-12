@@ -3,6 +3,7 @@ body {
   background-color: black;
   background-image: url('./assets/ground2.png');
   color: bisque;
+  width: 95%;
 }
 
 .canvas {
