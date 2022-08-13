@@ -398,9 +398,9 @@ function move() {
 
     player.updatePos();
     syncLocation();
-    // const tempX = (player.position.x * 100) / screen.width;
-    // console.log((tempX * screen.width) / 100);
-    // console.log(player.position.x);
+    const tempX = (player.position.x * 100) / screen.width;
+    console.log((tempX * screen.width) / 100);
+    console.log(player.position.x);
 
     players.forEach(player2 => {
       if (Math.hypot(player.position.x - player2.position.x, player.position.y - player2.position.y) < (player.radius + player2.radius) && player.id != player2.id) {
