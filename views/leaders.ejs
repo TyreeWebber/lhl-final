@@ -14,20 +14,17 @@
     <h1>The Score Board</h1>
   </header>
   <div class="container">
-  <table class="table">
-    <h2 class="heading">Who is the Winner</h2>
-    <tr class="title">
-      <th>Player</th>
-      <th>Points</th>
-    </tr>
-    <tr>
-    <td> <%= player1 %>: </td> 
-    <td> <%= points1 %> </td>
+  <div class="table">
+    <h2 class="heading">Who is the Winner?</h2>
+    <h3 class="title">
+    Player's Points
+    </h3>
+    <div>
+    <h4> <%= player1 %>: <%= points1 %> </h4> 
     <h2> VS </h2>
-    <td> <%= player2%>: </td>
-    <td> <%= points2 %> </td>
-    </tr>
-  </table>
+    <h4> <%= player2%>:<%= points2 %></h4>
+    </div>
+  </div>
 </div>
 </body>
 
