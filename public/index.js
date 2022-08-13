@@ -386,6 +386,7 @@ function move() {
   })
 
   players.forEach(player => {
+
     if (player.velocity.x == -5) {
       player.image = leftMovement;
     } else if (player.velocity.x == 5) {
@@ -395,7 +396,7 @@ function move() {
     } else if (player.velocity.y == -5) {
       player.image = upMovement;
     }
-    syncLocation();
+
     player.updatePos();
 
     players.forEach(player2 => {
@@ -445,9 +446,8 @@ button.addEventListener('click', () => {
   move();
 });
 
-
-
 window.addEventListener('keydown', (f) => {
+  syncLocation();
   socket.emit('Player moved', (f.key))
 })
 
