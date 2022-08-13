@@ -1,4 +1,4 @@
-body{
+body {
   margin: 0;
   padding: 0;
   background: url(background.jpeg);
@@ -7,7 +7,7 @@ body{
   font-family: sans-serif;
 }
 
-.loginbox{
+.loginbox {
   width: 320px;
   height: 420px;
   background: #7393B3;
@@ -21,14 +21,14 @@ body{
   border-style: solid;
 }
 
-.loginbox p{
+.loginbox p {
   margin: 0;
   padding: 0;
   font-weight: bold;
   text-align: center;
 }
 
-.loginbox h1{
+.loginbox h1 {
   margin: 0;
   margin-top: -30px;
   padding: 0 0 20px;
@@ -37,7 +37,7 @@ body{
   color: #000;
 }
 
-.loginbox input{
+.loginbox input {
   width: 100%;
   text-align: center; 
   margin-top: 10px;
@@ -53,7 +53,8 @@ body{
   color: #000;
 }
 
-.loginbox input[type="text"]{
+.loginbox input[type="text"] {
+  margin-top: 20px;
   border: 30px;
   border-bottom: 1px solid #000;
   background: transparent;
@@ -65,7 +66,7 @@ body{
 
 .enter {
   position: relative;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-left: 45px;
   border: none;
   background: transparent;
@@ -170,7 +171,7 @@ font-size: 10px;
 }
 
 .rulebox {
-  margin-top: 45px;
+  margin-top: 70px;
   background-color: #7fa3c7;
   border-style: solid;
   border-color: #58718a;
