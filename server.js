@@ -32,7 +32,6 @@ app.use(bodyParser.urlencoded({
 
 
 io.on('connection', (socket) => {
-
   i = 0;
 
   socket.on('start Game', () => {
@@ -74,7 +73,8 @@ io.on('connection', (socket) => {
   })
 
   socket.on('correctTurn', (player) => {
-    players[socket.id].position = player.position;
+    players[socket.id].position = player;
+    console.log(players[socket.id]);
     socket.broadcast.emit('UpdatePosition', players[socket.id])
   })
 

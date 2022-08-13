@@ -14,14 +14,17 @@
     <h1>Welcome to Dino Battle Royale</h1>
     <form action="/game" method="POST">
       <input type ="text" name="text" placeholder="Enter a username to play!" required>
+      <div class="rulebox">
+        <h2 class="rules">How to play</h2>
+        <p class ="controls">Control your character using WASD</p>
+        <p class ="pvp">Eat the yellow power-up pellet to be able to eat your opponent</p>
+        <p class ="wincon">Eat as many pellets as you can within the time limit to be crowned the victor!</p>
+      </div>
       <button type="submit" value="Submit" class="enter">
       <span class ="shadow"></span>
       <span class="edge"></span>
       <span class="front">Lets Run!</span>
       </button>
-    </form>
-    <form class="rules">
-      <p class="rules-text">test</p>
     </form>
     <!-- <button href="" action="/leaders" method ="GET" value="Submit" class="leaderboard">Look at our Champions</button> -->
   </div>

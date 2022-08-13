@@ -367,7 +367,6 @@ function move() {
         powerUps.splice(0, powerUps.length);
         player.powered = true;
         setTimeout(reSpawnPowerup, 10000);
-        console.log(player);
         setTimeout(removePower, 10000, player.id);
       }
     })
@@ -386,6 +385,7 @@ function move() {
   })
 
   players.forEach(player => {
+
     if (player.velocity.x == -5) {
       player.image = leftMovement;
     } else if (player.velocity.x == 5) {
@@ -395,8 +395,12 @@ function move() {
     } else if (player.velocity.y == -5) {
       player.image = upMovement;
     }
-    syncLocation();
+
     player.updatePos();
+    syncLocation();
+    // const tempX = (player.position.x * 100) / screen.width;
+    // console.log((tempX * screen.width) / 100);
+    // console.log(player.position.x);
 
     players.forEach(player2 => {
       if (Math.hypot(player.position.x - player2.position.x, player.position.y - player2.position.y) < (player.radius + player2.radius) && player.id != player2.id) {
@@ -445,27 +449,27 @@ button.addEventListener('click', () => {
   move();
 });
 
-
-
 window.addEventListener('keydown', (f) => {
+  syncLocation();
   socket.emit('Player moved', (f.key))
 })
 
 socket.on('UpdatePosition', p => {
   players.forEach(player => {
     if (player.id == p.id) {
-      player.position = p.position;
-      console.log('works');
+      player.position.x = (p.position.x * screen.width) / 100 ;
+      player.position.y = (p.position.y * screen.height) / 100;
+      // console.log(player.position.x, player.position.y);
     }
   })
 })
 
 function syncLocation() {
-  let currentPlayer;
   players.forEach(player => {
     if (socket.id == player.id) {
-      currentPlayer = player;
-      socket.emit('correctTurn', currentPlayer);
+      let sentX = (player.position.x * 100) / screen.width;
+      let sentY = (player.position.y * 100) / screen.height;
+      socket.emit('correctTurn', {x: sentX, y: sentY});
     }
   })
 }
