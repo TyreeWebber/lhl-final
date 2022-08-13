@@ -33,7 +33,6 @@ const gameTimer = function() {
         players.forEach( (player) => {
           if (player.id == socket.id) {
             socket.emit('game finished', player)
-
           }
         })
       }
@@ -100,21 +99,21 @@ socket.on('Move Player', key => {
       switch (key) {
         case 'w':
           player.velocity.x = 0;
-          player.velocity.y = -5;
+          player.velocity.y = -.45;
           player.image = upMovement;
           break
         case 's':
           player.velocity.x = 0;
-          player.velocity.y = 5;
+          player.velocity.y = .45;
           player.image = downMovement;
           break
         case 'a':
-          player.velocity.x = -5;
+          player.velocity.x = -.25;
           player.velocity.y = 0;
           player.image = leftMovement;
           break
         case 'd':
-          player.velocity.x = 5;
+          player.velocity.x = .25;
           player.velocity.y = 0;
           player.image = rightMovement;
           break
@@ -152,8 +151,8 @@ class Player {
 
   updatePos() {
     this.draw()
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
+    this.position.x += (this.velocity.x * screen.width) / 100;
+    this.position.y += (this.velocity.y * screen.height) / 100;
   }
 }
 
@@ -375,9 +374,9 @@ function move() {
   boundaries.forEach((Boundary) => {
     Boundary.draw();
     players.forEach(player => {
-      if (player.position.y - player.radius + player.velocity.y <= Boundary.position.y + Boundary.height && player.position.x + player.radius +
-        player.velocity.x >= Boundary.position.x && player.position.y + player.radius + player.velocity.y >= Boundary.position.y && player.position.x
-        - player.radius + player.velocity.x <= Boundary.position.x + Boundary.width) {
+      if (player.position.y - player.radius + (player.velocity.y * screen.height / 100) <= Boundary.position.y + Boundary.height && player.position.x + player.radius +
+      (player.velocity.x * screen.width / 100) >= Boundary.position.x && player.position.y + player.radius + (player.velocity.y * screen.height / 100) >= Boundary.position.y && player.position.x
+        - player.radius + (player.velocity.x * screen.width / 100) <= Boundary.position.x + Boundary.width) {
         player.velocity.x = 0;
         player.velocity.y = 0;
       }
@@ -386,13 +385,13 @@ function move() {
 
   players.forEach(player => {
 
-    if (player.velocity.x == -5) {
+    if (player.velocity.x < 0) {
       player.image = leftMovement;
-    } else if (player.velocity.x == 5) {
+    } else if (player.velocity.x > 0) {
       player.image = rightMovement;
-    } else if (player.velocity.y == 5) {
+    } else if (player.velocity.y > 0) {
       player.image = downMovement;
-    } else if (player.velocity.y == -5) {
+    } else if (player.velocity.y < 0) {
       player.image = upMovement;
     }
 
