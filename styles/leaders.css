@@ -13,18 +13,12 @@ body {
 }
 
 .table {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  font-size: 34px;
-  font-family: fantasy;
-  color: rgb(0, 0, 0);
   border: solid;
-  padding: 80px;
-  margin-left: 500px;
-  margin-right: 500px;
-  background-color: wheat;
-  
+  padding: 60px;
+  background-color: #7393B3;
+  margin-left: 24%;
+  margin-right: 24%;
+  font-size: 30px;
 }
 
 .heading {
