@@ -74,7 +74,7 @@ io.on('connection', (socket) => {
 
   socket.on('correctTurn', (player) => {
     players[socket.id].position = player;
-    console.log(players[socket.id]);
+    // console.log(players[socket.id]);
     socket.broadcast.emit('UpdatePosition', players[socket.id])
   })
 

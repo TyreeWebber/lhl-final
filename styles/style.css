@@ -4,7 +4,7 @@ body {
   background: url(background.jpeg);
   background-size: cover;
   background-position: center;
-  font-family: sans-serif;
+  font-family: fantasy;
 }
 
 .loginbox {
@@ -40,16 +40,19 @@ body {
 .loginbox input {
   width: 100%;
   text-align: center; 
+  font-family: fantasy;
   margin-top: 10px;
 }
 
 ::-webkit-input-placeholder {
   text-align: center;
+  font-family: fantasy;
   color: #000;
 }
 
 :-moz-placeholder {
   text-align: center;
+  font-family: fantasy;
   color: #000;
 }
 
@@ -111,6 +114,7 @@ body {
   padding: 12px 42px;
   border-radius: 12px;
   font-size: 1.25rem;
+  font-family: fantasy;
   color: #000;
   background: hsl(345deg 100% 47%);
   will-change: transform;
@@ -171,7 +175,7 @@ font-size: 10px;
 }
 
 .rulebox {
-  margin-top: 70px;
+  margin-top: 40px;
   background-color: #7fa3c7;
   border-style: solid;
   border-color: #58718a;
