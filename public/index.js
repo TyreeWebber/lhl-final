@@ -9,7 +9,7 @@ const score = document.getElementById('score');
 const playerName = document.getElementById('name').textContent;
 const dialog = document.getElementById('dialog');
 const button = document.getElementById('starter');
-let time = 10;
+let time = 30;
 let socket = io();
 let clientPlayers = {};
 
@@ -101,6 +101,7 @@ socket.on('Move Player', key => {
           player.velocity.x = 0;
           player.velocity.y = -.45;
           player.image = upMovement;
+          console.log(player.velocity.x);
           break
         case 's':
           player.velocity.x = 0;
@@ -240,21 +241,21 @@ const pacUp2 = new Image();
 pacUp2.src = '../assets/blue/pacup(2).png'
 
 const powerRight1 = new Image();
-powerRight1.src = '../assets/power/powerright(1).png'
+powerRight1.src = '../assets/orange/orangeright(1).png'
 const powerRight2 = new Image();
-powerRight2.src = '../assets/power/powerright(2).png'
+powerRight2.src = '../assets/orange/orangeright(2).png'
 const powerDown1 = new Image();
-powerDown1.src = '../assets/power/powerdown(1).png'
+powerDown1.src = '../assets/orange/orangedown(1).png'
 const powerDown2 = new Image();
-powerDown2.src = '../assets/power/powerdown(2).png'
+powerDown2.src = '../assets/orange/orangedown(2).png'
 const powerLeft1 = new Image ();
-powerLeft1.src = '../assets/power/powerleft(1).png'
+powerLeft1.src = '../assets/orange/orangeleft(1).png'
 const powerLeft2 = new Image();
-powerLeft2.src = '../assets/power/powerleft(2).png'
+powerLeft2.src = '../assets/orange/orangeleft(2).png'
 const powerUp1 = new Image ();
-powerUp1.src = '../assets/power/powerup(1).png'
+powerUp1.src = '../assets/orange/orangeup(1).png'
 const powerUp2 = new Image ();
-powerUp2.src = '../assets/power/powerup(2).png'
+powerUp2.src = '../assets/orange/orangeup(2).png'
 
 const deathSound = new Audio();
 deathSound.src = '../assets/audio/death.mp3'
@@ -383,29 +384,42 @@ function move() {
     })
   })
 
+  
   players.forEach(player => {
-
-    if (player.velocity.x < 0) {
+    if (player.id == socket.id) {
+      score.innerHTML = `Your Points: ${player.score}`
+    }
+    if (player.velocity.x < 0 && player.powered == false) {
       player.image = leftMovement;
-    } else if (player.velocity.x > 0) {
+    } else if (player.velocity.x > 0 && player.powered == false) {
       player.image = rightMovement;
-    } else if (player.velocity.y > 0) {
+    } else if (player.velocity.y > 0 && player.powered == false) {
       player.image = downMovement;
-    } else if (player.velocity.y < 0) {
+    } else if (player.velocity.y < 0 && player.powered == false) {
       player.image = upMovement;
+    } else if (player.velocity.x < 0 && player.powered == true) {
+      player.image = leftPower;
+    } else if (player.velocity.x > 0 && player.powered == true) {
+      player.image = rightPower
+    } else if (player.velocity.y > 0 && player.powered == true) {
+      player.image = downPower;
+    } else if (player.velocity.y < 0 && player.powered == true)  {
+      player.image = upPower;
     }
 
     player.updatePos();
     syncLocation();
     const tempX = (player.position.x * 100) / screen.width;
-    console.log((tempX * screen.width) / 100);
-    console.log(player.position.x);
+    // console.log((tempX * screen.width) / 100);
+    // console.log(player.position.x);
 
     players.forEach(player2 => {
       if (Math.hypot(player.position.x - player2.position.x, player.position.y - player2.position.y) < (player.radius + player2.radius) && player.id != player2.id) {
         if(player.powered == true && player2.powered == false) {
           deathSound.play();
           console.log(`${player.id} ate ${player2.id}`)
+          player.score += player2.score;
+          player2.score = 0;
           player2.position = {
             x: canvas.width - (boxWidth * 1.5),
             y: canvas.height - (boxHeight * 1.5)
